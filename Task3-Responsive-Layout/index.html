@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Task 3 – Responsive Layout</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f4f1eb;
+      --white: #ffffff;
+      --ink: #1c1c1e;
+      --mid: #5a5a6e;
+      --light: #e8e4db;
+      --accent: #3b5bdb;
+      --accent2: #f06543;
+      --nav-h: 68px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    /* ════════════ HEADER / NAV ════════════ */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--ink);
+      height: var(--nav-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span { color: var(--accent2); }
+
+    nav { display: flex; gap: 0.25rem; align-items: center; }
+
+    nav a {
+      color: #a0a0b0;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+
+    nav a:hover, nav a.active { background: rgba(255,255,255,0.1); color: #fff; }
+
+    /* Hamburger */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* Mobile nav drawer */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: var(--nav-h);
+      left: 0;
+      right: 0;
+      background: var(--ink);
+      padding: 1.5rem;
+      flex-direction: column;
+      gap: 0.5rem;
+      z-index: 99;
+      border-top: 1px solid #333;
+    }
+
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { color: #ccc; text-decoration: none; font-size: 1rem; padding: 0.6rem 0; border-bottom: 1px solid #2a2a2a; }
+    .mobile-nav a:last-child { border-bottom: none; }
+
+    /* ════════════ PAGE WRAPPER ════════════ */
+    .page-wrapper {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* ════════════ HERO BANNER ════════════ */
+    .hero {
+      background: linear-gradient(135deg, var(--accent) 0%, #1e3a8a 100%);
+      border-radius: 16px;
+      padding: 3rem 2.5rem;
+      margin-bottom: 2rem;
+      position: relative;
+      overflow: hidden;
+      color: #fff;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      right: -60px;
+      top: -60px;
+      width: 280px;
+      height: 280px;
+      background: rgba(255,255,255,0.06);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      line-height: 1.15;
+      margin-bottom: 0.75rem;
+    }
+
+    .hero p { color: rgba(255,255,255,0.8); max-width: 520px; font-size: 1rem; margin-bottom: 1.5rem; }
+
+    .hero-btn {
+      background: var(--accent2);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.8rem;
+      border-radius: 8px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .hero-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    /* ════════════ GRID LAYOUT ════════════ */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        "sidebar main"
+        "sidebar main";
+      gap: 1.5rem;
+    }
+
+    /* ════════════ SIDEBAR ════════════ */
+    aside {
+      grid-area: sidebar;
+    }
+
+    .sidebar-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    }
+
+    .sidebar-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+
+    /* Category list */
+    .cat-list { list-style: none; }
+
+    .cat-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--light);
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .cat-list li:last-child { border-bottom: none; }
+    .cat-list li:hover { color: var(--accent); }
+
+    .cat-count {
+      background: var(--light);
+      border-radius: 20px;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.55rem;
+      color: var(--mid);
+    }
+
+    /* Tags */
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+
+    .tag {
+      background: var(--light);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      padding: 0.3rem 0.75rem;
+      color: var(--mid);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tag:hover { background: var(--accent); color: #fff; }
+
+    /* Newsletter */
+    .newsletter input {
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border: 1.5px solid var(--light);
+      border-radius: 7px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      margin-bottom: 0.6rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .newsletter input:focus { border-color: var(--accent); }
+
+    .newsletter button {
+      width: 100%;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      padding: 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .newsletter button:hover { opacity: 0.85; }
+
+    /* ════════════ MAIN CONTENT ════════════ */
+    main {
+      grid-area: main;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    .stat-card:nth-child(1)::before { background: var(--accent); }
+    .stat-card:nth-child(2)::before { background: var(--accent2); }
+    .stat-card:nth-child(3)::before { background: #2ecc71; }
+
+    .stat-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+      margin-bottom: 0.4rem;
+    }
+
+    .stat-value {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .stat-change { font-size: 0.75rem; color: #2ecc71; margin-top: 0.3rem; }
+    .stat-change.down { color: #e74c3c; }
+
+    /* Article cards */
+    .articles-heading {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    .article-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .article-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .article-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+
+    .article-card img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .article-body { padding: 1rem 1.2rem 1.2rem; }
+
+    .article-tag {
+      display: inline-block;
+      background: #eef2ff;
+      color: var(--accent);
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+
+    .article-card h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 0.5rem;
+    }
+
+    .article-card p { font-size: 0.82rem; color: var(--mid); line-height: 1.5; }
+
+    .article-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 0.9rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid var(--light);
+      font-size: 0.75rem;
+      color: var(--mid);
+    }
+
+    /* ════════════ FOOTER ════════════ */
+    footer {
+      background: var(--ink);
+      color: #a0a0b0;
+      margin-top: 3rem;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .footer-brand .logo { display: block; margin-bottom: 0.75rem; }
+
+    .footer-brand p { font-size: 0.85rem; line-height: 1.6; max-width: 220px; }
+
+    .footer-col h4 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 0.5rem; }
+    .footer-col ul li a { color: #a0a0b0; text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-col ul li a:hover { color: #fff; }
+
+    .footer-bottom {
+      border-top: 1px solid #2a2a2a;
+      padding: 1.25rem 1.5rem;
+      text-align: center;
+      font-size: 0.78rem;
+    }
+
+    /* ════════════ RESPONSIVE ════════════ */
+    @media (max-width: 900px) {
+      .content-grid {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "main"
+          "sidebar";
+      }
+
+      .stats-row { grid-template-columns: 1fr 1fr; }
+
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 0 1rem; }
+
+      nav { display: none; }
+      .hamburger { display: flex; }
+
+      .page-wrapper { padding: 1rem; }
+
+      .hero { padding: 2rem 1.5rem; }
+
+      .stats-row { grid-template-columns: 1fr; }
+
+      .article-grid { grid-template-columns: 1fr; }
+
+      .footer-inner { grid-template-columns: 1fr; gap: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <div class="logo">Dev<span>Hub</span></div>
+    <nav>
+      <a href="#" class="active">Home</a>
+      <a href="#">Articles</a>
+      <a href="#">Projects</a>
+      <a href="#">Community</a>
+      <a href="#">About</a>
+    </nav>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </header>
+
+  <!-- Mobile Nav -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#">Home</a>
+    <a href="#">Articles</a>
+    <a href="#">Projects</a>
+    <a href="#">Community</a>
+    <a href="#">About</a>
+  </div>
+
+  <div class="page-wrapper">
+
+    <!-- ═══ HERO ═══ -->
+    <section class="hero">
+      <h1>Learn. Build.<br/>Ship. Repeat.</h1>
+      <p>A developer resource hub for front-end engineers, built with modern HTML, CSS, and JavaScript.</p>
+      <button class="hero-btn">Explore Articles →</button>
+    </section>
+
+    <!-- ═══ CONTENT GRID ═══ -->
+    <div class="content-grid">
+
+      <!-- ─── SIDEBAR ─── -->
+      <aside>
+        <div class="sidebar-card">
+          <h3>Categories</h3>
+          <ul class="cat-list">
+            <li>HTML & Semantics <span class="cat-count">24</span></li>
+            <li>CSS & Layouts <span class="cat-count">18</span></li>
+            <li>JavaScript <span class="cat-count">31</span></li>
+            <li>Frameworks <span class="cat-count">15</span></li>
+            <li>Performance <span class="cat-count">9</span></li>
+            <li>Accessibility <span class="cat-count">7</span></li>
+          </ul>
+        </div>
+
+        <div class="sidebar-card">
+          <h3>Popular Tags</h3>
+          <div class="tag-cloud">
+            <span class="tag">HTML5</span>
+            <span class="tag">CSS Grid</span>
+            <span class="tag">Flexbox</span>
+            <span class="tag">React</span>
+            <span class="tag">API</span>
+            <span class="tag">DOM</span>
+            <span class="tag">Git</span>
+            <span class="tag">Responsive</span>
+            <span class="tag">WCAG</span>
+          </div>
+        </div>
+
+        <div class="sidebar-card newsletter">
+          <h3>Newsletter</h3>
+          <p style="font-size:0.82rem;color:#666;margin-bottom:0.9rem">Get weekly dev tips in your inbox.</p>
+          <input type="email" placeholder="your@email.com"/>
+          <button>Subscribe</button>
+        </div>
+      </aside>
+
+      <!-- ─── MAIN ─── -->
+      <main>
+
+        <!-- Stats -->
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Articles Published</div>
+            <div class="stat-value">104</div>
+            <div class="stat-change">↑ +12 this month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Active Readers</div>
+            <div class="stat-value">8.4k</div>
+            <div class="stat-change">↑ +340 this week</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Code Snippets</div>
+            <div class="stat-value">352</div>
+            <div class="stat-change">↑ +28 new</div>
+          </div>
+        </div>
+
+        <!-- Articles -->
+        <div>
+          <p class="articles-heading">Latest Articles</p>
+        </div>
+        <div class="article-grid">
+
+          <article class="article-card">
+            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=600&q=80" alt="CSS Grid"/>
+            <div class="article-body">
+              <span class="article-tag">CSS</span>
+              <h4>Mastering CSS Grid in 2025</h4>
+              <p>A complete walkthrough of every CSS Grid property you need to build complex layouts effortlessly.</p>
+              <div class="article-footer">
+                <span>May 12, 2026</span>
+                <span>6 min read</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="article-card">
+            <img src="https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=600&q=80" alt="JavaScript"/>
+            <div class="article-body">
+              <span class="article-tag">JavaScript</span>
+              <h4>Async/Await Patterns You Should Know</h4>
+              <p>Avoid callback hell and write cleaner asynchronous code using modern JavaScript patterns.</p>
+              <div class="article-footer">
+                <span>May 13, 2026</span>
+                <span>8 min read</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="article-card">
+            <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=600&q=80" alt="Responsive"/>
+            <div class="article-body">
+              <span class="article-tag">Responsive</span>
+              <h4>Mobile-First Design Strategy</h4>
+              <p>Why building for mobile first leads to better, more performant experiences across all devices.</p>
+              <div class="article-footer">
+                <span>May 10, 2026</span>
+                <span>5 min read</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="article-card">
+            <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=600&q=80" alt="Accessibility"/>
+            <div class="article-body">
+              <span class="article-tag">Accessibility</span>
+              <h4>ARIA Roles Every Dev Needs</h4>
+              <p>Make your web apps usable by everyone with the right ARIA attributes and semantic HTML practices.</p>
+              <div class="article-footer">
+                <span>May 4, 2026</span>
+                <span>7 min read</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </main>
+
+    </div><!-- end content-grid -->
+
+  </div><!-- end page-wrapper -->
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo">Dev<span>Hub</span></span>
+        <p>A resource platform for front-end developers built with pure HTML, CSS & JS.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="#">HTML Basics</a></li>
+          <li><a href="#">CSS Layouts</a></li>
+          <li><a href="#">JS Fundamentals</a></li>
+          <li><a href="#">Projects</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="#">LinkedIn</a></li>
+          <li><a href="#">GitHub</a></li>
+          <li><a href="#">Twitter/X</a></li>
+          <li><a href="#">Newsletter</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2025 DevHub · SaiKet Systems Internship Project · All rights reserved
+    </div>
+  </footer>
+
+  <script>
+    function toggleMenu() {
+      const nav = document.getElementById('mobileNav');
+      nav.classList.toggle('open');
+    }
+  </script>
+
+</body>
+</html>

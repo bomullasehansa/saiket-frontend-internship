@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Future of Web Development | TechBlog</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #1a1410;
+      --cream: #f5f0e8;
+      --warm: #e8dfc8;
+      --accent: #c0392b;
+      --muted: #7a6e62;
+      --rule: #d4c9b0;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--ink);
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-size: 1.1rem;
+      line-height: 1.8;
+    }
+
+    /* ── HEADER ── */
+    header {
+      background: var(--ink);
+      color: var(--cream);
+      text-align: center;
+      padding: 3rem 2rem 2.5rem;
+      border-bottom: 6px double var(--accent);
+    }
+
+    header .blog-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      line-height: 1.15;
+      max-width: 760px;
+      margin: 0 auto 1.5rem;
+    }
+
+    .post-meta {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      font-size: 0.85rem;
+      letter-spacing: 0.08em;
+      color: #b0a898;
+    }
+
+    .post-meta span { display: flex; align-items: center; gap: 0.4rem; }
+    .post-meta .dot { color: var(--accent); font-size: 1.2rem; }
+
+    /* ── HERO IMAGE ── */
+    .hero-image {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      display: block;
+      position: relative;
+    }
+
+    .hero-image figure {
+      margin: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 420px;
+      object-fit: cover;
+      display: block;
+      filter: sepia(20%) contrast(1.05);
+    }
+
+    .hero-image figcaption {
+      background: var(--ink);
+      color: #b0a898;
+      font-size: 0.78rem;
+      font-style: italic;
+      padding: 0.5rem 1rem;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 3rem 2rem 4rem;
+    }
+
+    /* ── SECTION STYLES ── */
+    section {
+      margin-bottom: 3rem;
+    }
+
+    section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--rule);
+      color: var(--ink);
+    }
+
+    section h2::before {
+      content: '§ ';
+      color: var(--accent);
+      font-size: 1rem;
+    }
+
+    p { margin-bottom: 1rem; color: #2e2820; }
+
+    /* DROP CAP for introduction */
+    #introduction p:first-of-type::first-letter {
+      font-family: 'Playfair Display', serif;
+      font-size: 4.5rem;
+      font-weight: 900;
+      float: left;
+      line-height: 0.75;
+      margin-right: 0.12em;
+      margin-top: 0.1em;
+      color: var(--accent);
+    }
+
+    /* ── LIST ── */
+    ul.article-list {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0;
+    }
+
+    ul.article-list li {
+      padding: 0.75rem 0 0.75rem 2rem;
+      position: relative;
+      border-bottom: 1px solid var(--rule);
+      font-size: 1rem;
+    }
+
+    ul.article-list li:last-child { border-bottom: none; }
+
+    ul.article-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    ul.article-list li strong {
+      display: block;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--ink);
+      margin-bottom: 0.2rem;
+    }
+
+    ul.article-list li span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-style: italic;
+    }
+
+    /* ── PULL QUOTE ── */
+    blockquote {
+      border-left: 4px solid var(--accent);
+      background: var(--warm);
+      margin: 2rem 0;
+      padding: 1.25rem 1.75rem;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.2rem;
+      color: var(--ink);
+    }
+
+    blockquote cite {
+      display: block;
+      margin-top: 0.75rem;
+      font-family: 'Source Serif 4', serif;
+      font-size: 0.82rem;
+      font-style: normal;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    /* ── READ MORE LINK ── */
+    .read-more-wrap {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 3px double var(--rule);
+    }
+
+    .read-more {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      font-family: 'Playfair Display', serif;
+      font-size: 0.9rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.85rem 2.5rem;
+      border: 2px solid var(--accent);
+      transition: all 0.25s ease;
+    }
+
+    .read-more:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    /* ── TAGS ── */
+    .tags {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .tags a {
+      background: var(--warm);
+      border: 1px solid var(--rule);
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.3rem 0.8rem;
+      transition: background 0.2s;
+    }
+
+    .tags a:hover { background: var(--ink); color: var(--cream); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--ink);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+    }
+
+    footer p{
+        color: #f6f6f6;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <!-- ═══ HEADER ═══ -->
+  <header>
+    <p class="blog-name">TechBlog — by SaiKet Interns</p>
+    <h1>The Future of Web Development: Trends Shaping 2026</h1>
+    <div class="post-meta">
+      <span>✍ <strong>Alex Rivera</strong></span>
+      <span class="dot">•</span>
+      <span><time datetime="2026-05-12">May 12, 2026</time></span>
+      <span class="dot">•</span>
+      <span>8 min read</span>
+    </div>
+  </header>
+
+  <!-- ═══ HERO IMAGE ═══ -->
+  <div class="hero-image">
+    <figure>
+      <img
+        src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1200&q=80"
+        alt="Developer working on a modern laptop with code visible on screen"
+      />
+      <figcaption>A developer crafting the next generation of web experiences. Photo: Unsplash</figcaption>
+    </figure>
+  </div>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main>
+
+    <!-- INTRODUCTION -->
+    <section id="introduction">
+      <h2>Introduction</h2>
+      <p>
+        The world of web development is evolving at a breathtaking pace. What was cutting-edge
+        just two years ago has already become baseline expectation. As we move through 2026,
+        developers face both exciting opportunities and formidable challenges — from mastering
+        new frameworks to navigating an AI-augmented workflow.
+      </p>
+      <p>
+        Understanding which trends are truly transformative versus which are passing fads is
+        critical for any developer who wants to stay relevant. This post breaks down the key
+        forces reshaping front-end and full-stack development right now.
+      </p>
+    </section>
+
+    <!-- MAIN CONTENT WITH LIST -->
+    <section id="main-content">
+      <h2>Key Trends to Watch</h2>
+      <p>
+        Based on industry surveys, developer communities, and real-world adoption rates,
+        here are the most significant trends defining modern web development:
+      </p>
+
+      <ul class="article-list">
+        <li>
+          <strong>AI-Assisted Development</strong>
+          <span>Tools like GitHub Copilot and Claude are becoming standard in development pipelines, boosting productivity and code quality.</span>
+        </li>
+        <li>
+          <strong>WebAssembly (WASM)</strong>
+          <span>Near-native performance in the browser is unlocking applications previously impossible on the web — from gaming to video editing.</span>
+        </li>
+        <li>
+          <strong>Edge Computing & Serverless</strong>
+          <span>Deploying logic closer to users reduces latency dramatically. Platforms like Vercel and Cloudflare Workers lead this shift.</span>
+        </li>
+        <li>
+          <strong>Component-Driven Architecture</strong>
+          <span>Design systems and reusable component libraries have become non-negotiable for scalable, maintainable codebases.</span>
+        </li>
+        <li>
+          <strong>Accessibility-First Design</strong>
+          <span>WCAG compliance is no longer optional. Inclusive design is both an ethical requirement and a legal expectation in many regions.</span>
+        </li>
+      </ul>
+
+      <blockquote>
+        "The best developers aren't those who know the most frameworks — they're the ones who
+        understand user needs deeply and can pick the right tool for the job."
+        <cite>— Sarah Chen, Principal Engineer at Mozilla</cite>
+      </blockquote>
+    </section>
+
+    <!-- CONCLUSION -->
+    <section id="conclusion">
+      <h2>Conclusion</h2>
+      <p>
+        Web development in 2026 rewards those who stay curious and adaptable. The technical
+        landscape will keep shifting, but the fundamentals — clean code, user empathy, and
+        performance awareness — remain constant anchors.
+      </p>
+      <p>
+        Whether you're just starting your journey or a seasoned professional, investing time in
+        these trends will pay dividends. The web is still the most accessible platform in
+        human history — and it's only getting better.
+      </p>
+
+      <div class="tags">
+        <a href="#">HTML</a>
+        <a href="#">CSS</a>
+        <a href="#">JavaScript</a>
+        <a href="#">Web Dev</a>
+        <a href="#">Frontend</a>
+      </div>
+    </section>
+
+    <!-- READ MORE LINK -->
+    <div class="read-more-wrap">
+      <a href="#" class="read-more">Read More Articles →</a>
+    </div>
+
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer>
+    <p>© 2026 TechBlog · Built for SaiKet Systems Internship · <a href="#">Privacy</a> · <a href="#">Contact</a></p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Task 2 – Product Card</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --card: #222;
+      --border: #333;
+      --text: #f0ede8;
+      --muted: #888;
+      --gold: #d4a843;
+      --gold-light: #e8c06a;
+      --red: #e05252;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      gap: 3rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ─── CARDS ROW ─── */
+    .cards-row {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ─── PRODUCT CARD ─── */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      width: 280px;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.35s cubic-bezier(.22,.68,0,1.2), box-shadow 0.35s ease;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.6), 0 0 0 1px var(--gold);
+    }
+
+    /* Badge */
+    .card .badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: var(--red);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      z-index: 2;
+    }
+
+    /* Wishlist */
+    .card .wishlist {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      z-index: 2;
+    }
+
+    .card .wishlist:hover { background: var(--red); border-color: var(--red); }
+
+    /* Image */
+    .card .img-wrap {
+      height: 220px;
+      overflow: hidden;
+      background: #2a2a2a;
+      position: relative;
+    }
+
+    .card .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+      display: block;
+    }
+
+    .card:hover .img-wrap img { transform: scale(1.06); }
+
+    /* Body */
+    .card-body {
+      padding: 1.2rem 1.4rem 1.4rem;
+    }
+
+    .card-category {
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .card-name {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.2rem;
+      line-height: 1.3;
+      margin-bottom: 0.6rem;
+      color: var(--text);
+    }
+
+    /* Stars */
+    .stars {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .stars span { color: var(--gold); font-size: 0.85rem; }
+    .stars .count { color: var(--muted); font-size: 0.75rem; margin-left: 0.2rem; }
+
+    /* Price row */
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.7rem;
+      margin-bottom: 1.1rem;
+    }
+
+    .price-current {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .price-original {
+      font-size: 0.95rem;
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .price-save {
+      font-size: 0.75rem;
+      color: var(--red);
+      font-weight: 600;
+    }
+
+    /* ADD TO CART BUTTON */
+    .btn-cart {
+      width: 100%;
+      background: var(--gold);
+      color: #0f0f0f;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.85rem;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+    }
+
+    .btn-cart::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.35) 50%, transparent 70%);
+      transform: translateX(-100%);
+      transition: transform 0.5s ease;
+    }
+
+    .btn-cart:hover {
+      background: var(--gold-light);
+      transform: scale(1.02);
+      box-shadow: 0 8px 24px rgba(212, 168, 67, 0.4);
+    }
+
+    .btn-cart:hover::before { transform: translateX(100%); }
+
+    .btn-cart:active { transform: scale(0.97); }
+
+    /* ─── NOTIFICATION TOAST ─── */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(120px);
+      background: #1a1a1a;
+      border: 1px solid var(--gold);
+      color: var(--text);
+      padding: 0.85rem 1.8rem;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      transition: transform 0.4s cubic-bezier(.22,.68,0,1.2);
+      z-index: 99;
+      white-space: nowrap;
+    }
+
+    .toast.show { transform: translateX(-50%) translateY(0); }
+  </style>
+</head>
+<body>
+
+  <h1>Featured Products</h1>
+
+  <div class="cards-row">
+
+    <!-- CARD 1 -->
+    <article class="card">
+      <div class="badge">Sale</div>
+      <div class="wishlist" title="Add to wishlist">♡</div>
+      <div class="img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&q=80"
+          alt="Premium Minimalist Watch"
+        />
+      </div>
+      <div class="card-body">
+        <p class="card-category">Accessories · Watches</p>
+        <h2 class="card-name">Meridian Pro Watch</h2>
+        <div class="stars">
+          <span>★★★★★</span>
+          <span class="count">(129 reviews)</span>
+        </div>
+        <div class="price-row">
+          <span class="price-current">$89.99</span>
+          <span class="price-original">$129.99</span>
+          <span class="price-save">Save 31%</span>
+        </div>
+        <button class="btn-cart" onclick="addToCart('Meridian Pro Watch')">🛒 Add to Cart</button>
+      </div>
+    </article>
+
+    <!-- CARD 2 -->
+    <article class="card">
+      <div class="badge">New</div>
+      <div class="wishlist" title="Add to wishlist">♡</div>
+      <div class="img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=600&q=80"
+          alt="Luxury Fragrance"
+        />
+      </div>
+      <div class="card-body">
+        <p class="card-category">Beauty · Fragrance</p>
+        <h2 class="card-name">Noir Elixir Perfume</h2>
+        <div class="stars">
+          <span>★★★★☆</span>
+          <span class="count">(74 reviews)</span>
+        </div>
+        <div class="price-row">
+          <span class="price-current">$64.00</span>
+          <span class="price-original">$74.00</span>
+        </div>
+        <button class="btn-cart" onclick="addToCart('Noir Elixir Perfume')">🛒 Add to Cart</button>
+      </div>
+    </article>
+
+    <!-- CARD 3 -->
+    <article class="card">
+      <div class="wishlist" title="Add to wishlist">♡</div>
+      <div class="img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&q=80"
+          alt="Running Shoes"
+        />
+      </div>
+      <div class="card-body">
+        <p class="card-category">Footwear · Sport</p>
+        <h2 class="card-name">Velocity Run X2</h2>
+        <div class="stars">
+          <span>★★★★★</span>
+          <span class="count">(203 reviews)</span>
+        </div>
+        <div class="price-row">
+          <span class="price-current">$119.00</span>
+          <span class="price-original">$155.00</span>
+          <span class="price-save">Save 23%</span>
+        </div>
+        <button class="btn-cart" onclick="addToCart('Velocity Run X2')">🛒 Add to Cart</button>
+      </div>
+    </article>
+
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function addToCart(name) {
+      const toast = document.getElementById('toast');
+      toast.textContent = `✓  "${name}" added to cart!`;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    // Wishlist toggle
+    document.querySelectorAll('.wishlist').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        btn.textContent = btn.textContent === '♡' ? '♥' : '♡';
+        btn.style.color = btn.textContent === '♥' ? '#e05252' : '';
+      });
+    });
+  </script>
+</body>
+</html>
